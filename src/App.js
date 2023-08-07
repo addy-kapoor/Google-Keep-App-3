@@ -1,23 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './header.js';
+import Footer from './Footer';
+import CreateNotes from "./CreateNotes";
+import Notes from './Notes';
+import React, { useState } from "react";
 
 function App() {
+  const [AllNotes, SetAllNotes] = useState([]);
+  const addNotes = (Notes) => {
+    SetAllNotes((prevNotes) => [...prevNotes, Notes])
+  }
+  const delNotes = (key) => {
+        const filteredNotes = AllNotes.filter((note, index) => index !== key);
+        SetAllNotes(filteredNotes);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <CreateNotes addingNotes={addNotes} />
+      <div className="notes-container">
+        {AllNotes.map((note, index) => (
+          <Notes key={index} title={note.title} body={note.body} deletingNotes={delNotes} index={index}/>
+        ))}
+      </div>
+      <Footer />
     </div>
   );
 }
